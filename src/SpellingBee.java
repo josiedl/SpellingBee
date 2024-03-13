@@ -52,6 +52,7 @@ public class SpellingBee {
     //  that will find the substrings recursively.
     public void sort() {
         // YOUR CODE HERE
+        words = mergeSort(words, 0, words.size() - 1);
     }
 
     // Removes duplicates from the sorted list.
@@ -115,9 +116,57 @@ public class SpellingBee {
         }
     }
 
-//    public void mergeSort(ArrayList<String> words) {
+    // Generates all possible words
+//    public ArrayList<String> generateWords(String letters) {
 //
 //    }
+
+    // Checks if a word is in the Dictionary
+    public boolean isInDictionary(String word) {
+        for (String s : DICTIONARY) {
+            if (word.equals(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Merges two arraylists of strings
+    public ArrayList<String> merge(ArrayList<String> arr1, ArrayList<String> arr2) {
+        ArrayList<String> mergedArray = new ArrayList<String>();
+        int index1 = 0, index2 = 0;
+        while (index1 < arr1.size() && index2 < arr2.size()) {
+            if (arr1.get(index1).compareTo(arr2.get(index2)) < 0) {
+                mergedArray.add(arr1.get(index1++));
+            }
+            else {
+                mergedArray.add(arr2.get(index2++));
+            }
+        }
+
+        // Copy over remaining elements
+        while (index1 < arr1.size()) {
+            mergedArray.add(arr1.get(index1++));
+        }
+        while (index2 < arr2.size()) {
+            mergedArray.add(arr2.get(index2++));
+        }
+
+        return mergedArray;
+    }
+
+    // Mergesorts an arraylist of strings
+    public ArrayList<String> mergeSort(ArrayList<String> words, int low, int high) {
+        ArrayList<String> sortedWords = new ArrayList<String>();
+        if (high - low == 0) {
+            sortedWords.add(words.get(0));
+            return sortedWords;
+        }
+        int med = (high + low) / 2;
+        ArrayList<String> arr1 = mergeSort(words, low, med);
+        ArrayList<String> arr2 = mergeSort(words, med + 1, high);
+        return merge(arr1, arr2);
+    }
 
     // Returns true if an inputted word is found in dictionary, otherwise returns false
     public boolean canBeFound(String word, int start, int end) {
