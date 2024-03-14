@@ -38,6 +38,9 @@ public class SpellingBee {
     public SpellingBee(String letters) {
         this.letters = letters;
         words = new ArrayList<String>();
+        words.add("c");
+        words.add("a");
+        words.add("b");
     }
 
     // TODO: generate all possible substrings and permutations of the letters.
@@ -45,6 +48,7 @@ public class SpellingBee {
     //  that will find the substrings recursively.
     public void generate() {
         // YOUR CODE HERE — Call your recursive method!
+        makeWords("", letters);
 
     }
 
@@ -117,19 +121,15 @@ public class SpellingBee {
     }
 
     // Generates all possible words
-//    public ArrayList<String> generateWords(String letters) {
-//
-//    }
-
-    // Checks if a word is in the Dictionary
-    public boolean isInDictionary(String word) {
-        for (String s : DICTIONARY) {
-            if (word.equals(s)) {
-                return true;
-            }
+    public void makeWords(String word, String letters) {
+        if (letters.length() == 0) {
+            words.add(word);
         }
-        return false;
+        for (int i = 0; i < letters.length(); i++) {
+            makeWords(letters.substring(i, i+1), letters.substring(1));
+        }
     }
+
 
     // Merges two arraylists of strings
     public ArrayList<String> merge(ArrayList<String> arr1, ArrayList<String> arr2) {
