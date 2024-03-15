@@ -38,9 +38,6 @@ public class SpellingBee {
     public SpellingBee(String letters) {
         this.letters = letters;
         words = new ArrayList<String>();
-        words.add("c");
-        words.add("a");
-        words.add("b");
     }
 
     // TODO: generate all possible substrings and permutations of the letters.
@@ -125,8 +122,11 @@ public class SpellingBee {
         if (letters.length() == 0) {
             words.add(word);
         }
-        for (int i = 0; i < letters.length(); i++) {
-            makeWords(letters.substring(i, i+1), letters.substring(1));
+        else {
+            for (int i = 0; i < letters.length(); i++) {
+                makeWords(letters.substring(i, i + 1), letters.substring(0, i) + letters.substring(i + 1));
+            }
+            words.add(word);
         }
     }
 
