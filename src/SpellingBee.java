@@ -46,14 +46,58 @@ public class SpellingBee {
     public void generate() {
         // YOUR CODE HERE — Call your recursive method!
         makeWords("", letters);
+    }
 
+    // Generates all possible words
+    public void makeWords(String word, String letters) {
+        words.add(word);
+        //words.add(word);
+        for (int i = 0; i < letters.length(); i++) {
+            makeWords(word + letters.charAt(i), letters.substring(0, i) + letters.substring(i + 1));
+        }
     }
 
     // TODO: Apply mergesort to sort all words. Do this by calling ANOTHER method
     //  that will find the substrings recursively.
     public void sort() {
-        // YOUR CODE HERE
         words = mergeSort(words, 0, words.size() - 1);
+    }
+
+    // Merges two arraylists of strings
+    public ArrayList<String> merge(ArrayList<String> arr1, ArrayList<String> arr2) {
+        ArrayList<String> mergedArray = new ArrayList<String>();
+        int index1 = 0, index2 = 0;
+        while (index1 < arr1.size() && index2 < arr2.size()) {
+            if (arr1.get(index1).compareTo(arr2.get(index2)) < 0) {
+                mergedArray.add(arr1.get(index1++));
+            }
+            else {
+                mergedArray.add(arr2.get(index2++));
+            }
+        }
+
+        // Copy over remaining elements
+        while (index1 < arr1.size()) {
+            mergedArray.add(arr1.get(index1++));
+        }
+        while (index2 < arr2.size()) {
+            mergedArray.add(arr2.get(index2++));
+        }
+
+        return mergedArray;
+    }
+
+    // Mergesorts an arraylist of strings
+    public ArrayList<String> mergeSort(ArrayList<String> words, int low, int high) {
+        if (high - low == 0) {
+            ArrayList<String> newWords = new ArrayList<String>();
+            newWords.add(words.get(low));
+            return newWords;
+        }
+        int mid = (high + low) / 2;
+        ArrayList<String> arr1 = mergeSort(words, low, mid);
+        ArrayList<String> arr2 = mergeSort(words, mid + 1, high);
+        return merge(arr1, arr2);
     }
 
     // Removes duplicates from the sorted list.
@@ -77,6 +121,23 @@ public class SpellingBee {
                 i--;
             }
         }
+    }
+
+    // Returns true if an inputted word is found in dictionary, otherwise returns false
+    public boolean canBeFound(String word, int start, int end){
+            int mid = start + (end - start) / 2;
+            if (word.equals(DICTIONARY[mid])) {
+                return true;
+            }
+            if (start >= end) {
+                return false;
+            }
+            else if (word.compareTo(DICTIONARY[mid]) < 0) {
+                return canBeFound(word, start, mid - 1);
+            }
+            else {
+                return canBeFound(word, mid + 1, end);
+            }
     }
 
     // Prints all valid words to wordList.txt
@@ -115,75 +176,6 @@ public class SpellingBee {
         while(s.hasNextLine()) {
             DICTIONARY[i++] = s.nextLine();
         }
-    }
-
-    // Generates all possible words
-    public void makeWords(String word, String letters) {
-        if (letters.length() == 0) {
-            words.add(word);
-        }
-        else {
-            for (int i = 0; i < letters.length(); i++) {
-                makeWords(letters.substring(i, i + 1), letters.substring(0, i) + letters.substring(i + 1));
-            }
-            words.add(word);
-        }
-    }
-
-
-    // Merges two arraylists of strings
-    public ArrayList<String> merge(ArrayList<String> arr1, ArrayList<String> arr2) {
-        ArrayList<String> mergedArray = new ArrayList<String>();
-        int index1 = 0, index2 = 0;
-        while (index1 < arr1.size() && index2 < arr2.size()) {
-            if (arr1.get(index1).compareTo(arr2.get(index2)) < 0) {
-                mergedArray.add(arr1.get(index1++));
-            }
-            else {
-                mergedArray.add(arr2.get(index2++));
-            }
-        }
-
-        // Copy over remaining elements
-        while (index1 < arr1.size()) {
-            mergedArray.add(arr1.get(index1++));
-        }
-        while (index2 < arr2.size()) {
-            mergedArray.add(arr2.get(index2++));
-        }
-
-        return mergedArray;
-    }
-
-    // Mergesorts an arraylist of strings
-    public ArrayList<String> mergeSort(ArrayList<String> words, int low, int high) {
-        ArrayList<String> sortedWords = new ArrayList<String>();
-        if (high - low == 0) {
-            sortedWords.add(words.get(0));
-            return sortedWords;
-        }
-        int med = (high + low) / 2;
-        ArrayList<String> arr1 = mergeSort(words, low, med);
-        ArrayList<String> arr2 = mergeSort(words, med + 1, high);
-        return merge(arr1, arr2);
-    }
-
-    // Returns true if an inputted word is found in dictionary, otherwise returns false
-    public boolean canBeFound(String word, int start, int end) {
-        int mid = (start + end) / 2;
-        if (word.equals(DICTIONARY[mid])) {
-            return true;
-        }
-        if (start == end) {
-            return false;
-        }
-        if (word.compareTo(DICTIONARY[mid]) < 0) {
-            canBeFound(word, 0, mid - 1);
-        }
-        else {
-            canBeFound(word, mid + 1, end);
-        }
-        return false;
     }
 
     public static void main(String[] args) {
